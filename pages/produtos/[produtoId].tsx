@@ -1,26 +1,30 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
 
-export default function Categoria() {
-    const router = useRouter();
-    const [produto, setProduto] = useState({ nome: '' });
+export async function getServerSideProps(context: GetServerSideProps) {
+    const id = context.params.produtoId;
 
-    useEffect(() => {
-        if (router.query.produtoId) {
-            fetch(
-                'http://localhost:3000/api/produtos?id=' +
-                    router.query.produtoId
-            )
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data) {
-                        setProduto(data);
-                    }
-                });
+    if (id) {
+        const response = await fetch(
+            'http://localhost:3000/api/produtos?id=' + id
+        );
+        const data = await response.json();
+
+        if (data) {
+            return {
+                props: {
+                    produto: data,
+                },
+            };
         }
-    }, [router]);
+    }
 
+    return { props: { produto: {} } };
+}
+
+export default function Categoria({ produto = { nome: '' } }) {
     return (
         <div>
             SELECIONADO: {produto?.nome}
