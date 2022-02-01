@@ -1,22 +1,36 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { GetServerSideProps, GetStaticProps } from 'next';
+import {
+    GetServerSideProps,
+    GetStaticProps,
+    GetStaticPropsContext,
+} from 'next';
 
-export async function getStaticProps(context: GetStaticProps) {
-    // const id = context.params.produtoId;
-    const id = '123';
+export async function getStaticPaths() {
+    return {
+        paths: [
+            { params: { produtoId: '123' } },
+            { params: { produtoId: '456' } },
+        ],
+        fallback: true,
+    };
+}
+
+export async function getStaticProps(context: GetStaticPropsContext) {
+    const id = context?.params?.produtoId;
+
+    const listaProdutos = [
+        { id: '123', nome: 'Chocolate' },
+        { id: '456', nome: 'Sorvete' },
+    ];
 
     if (id) {
-        const response = await fetch(
-            'http://localhost:3000/api/produtos?id=' + id
-        );
-        const data = await response.json();
-
-        if (data) {
+        const produto = listaProdutos.find((produto) => produto.id === id);
+        if (produto) {
             return {
                 props: {
-                    produto: data,
+                    produto,
                 },
             };
         }
