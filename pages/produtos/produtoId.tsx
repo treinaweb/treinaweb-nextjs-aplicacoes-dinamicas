@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetStaticProps } from 'next';
 
-export async function getServerSideProps(context: GetServerSideProps) {
-    const id = context.params.produtoId;
+export async function getStaticProps(context: GetStaticProps) {
+    // const id = context.params.produtoId;
+    const id = '123';
 
     if (id) {
         const response = await fetch(
