@@ -11,9 +11,9 @@ export async function getStaticPaths() {
     return {
         paths: [
             { params: { produtoId: '123' } },
-            { params: { produtoId: '456' } },
+            // { params: { produtoId: '456' } },
         ],
-        fallback: true,
+        fallback: 'blocking',
     };
 }
 
@@ -24,8 +24,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         { id: '123', nome: 'Chocolate' },
         { id: '456', nome: 'Sorvete' },
     ];
-
-    console.log('getStaticProps', id);
 
     if (id) {
         const produto = listaProdutos.find((produto) => produto.id === id);
@@ -57,16 +55,11 @@ export default function Categoria({ produto = { nome: '' } }) {
                         <a>Chocolate</a>
                     </Link>
                 </li>
-                <li>
+                {/* <li>
                     <Link href="/produtos/456">
                         <a>Sorvete</a>
                     </Link>
-                </li>
-                <li>
-                    <Link href="/produtos/555">
-                        <a>Outro Produto</a>
-                    </Link>
-                </li>
+                </li> */}
             </ul>
         </div>
     );
