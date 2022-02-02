@@ -25,6 +25,8 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         { id: '456', nome: 'Sorvete' },
     ];
 
+    console.log('getStaticProps', id);
+
     if (id) {
         const produto = listaProdutos.find((produto) => produto.id === id);
         if (produto) {
@@ -40,6 +42,12 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 }
 
 export default function Categoria({ produto = { nome: '' } }) {
+    const router = useRouter();
+
+    if (router.isFallback) {
+        return <div>Carregando...</div>;
+    }
+
     return (
         <div>
             SELECIONADO: {produto?.nome}
@@ -52,6 +60,11 @@ export default function Categoria({ produto = { nome: '' } }) {
                 <li>
                     <Link href="/produtos/456">
                         <a>Sorvete</a>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/produtos/555">
+                        <a>Outro Produto</a>
                     </Link>
                 </li>
             </ul>
