@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
+import { BlogPost } from '../../../data/@types/BlogPostInterface';
 
 const PostsApis = axios.create({
     baseURL: 'http://localhost:3002/api/posts',
@@ -12,6 +13,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     switch (req.method) {
         case 'GET':
             return handleGet(req, res);
+        case 'POST':
+            return handlePost(req, res);
         default:
             res.status(405).send({ error: 'Method not allowed' });
     }
@@ -20,4 +23,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     const posts = await PostsApis.get('/');
     res.status(200).json(posts.data);
+}
+
+async function handlePost(req: NextApiRequest, res: NextApiResponse) {
+    const newPost = req.body.data as BlogPost;
+    newPost.slug = newPost.title
+        .toLowerCase()
+        .replace(/\s/g, '-')
+        .replace(/[^\w-]+/g, '');
+
+    const createdPost = await PostsApis.post('/', newPost);
+    res.status(200).json(createdPost.data);
 }
