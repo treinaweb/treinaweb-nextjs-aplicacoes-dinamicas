@@ -13,6 +13,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     switch (req.method) {
         case 'GET':
             return handleGet(req, res);
+        case 'DELETE':
+            return handleDelete(req, res);
         default:
             res.status(405).send({ error: 'Method not allowed' });
     }
@@ -32,4 +34,14 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
             error: 'Post not found',
         });
     }
+}
+
+async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
+    await PostsApis.delete('/', {
+        params: {
+            id: req.query.postId,
+        },
+    });
+
+    res.status(200).end();
 }
