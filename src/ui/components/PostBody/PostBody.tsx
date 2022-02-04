@@ -10,7 +10,10 @@ export default function PostBody({ post }: { post: BlogPost }) {
                 src={post.picture}
                 alt={post.title}
             />
-            <div className={styles['post-content']}>{post.content}</div>
+            <div
+                className={styles['post-content']}
+                dangerouslySetInnerHTML={{ __html: post.content }}
+            />
         </div>
     );
 }
