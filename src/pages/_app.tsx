@@ -2,10 +2,11 @@ import '../ui/styles/globals.css';
 import type { AppProps } from 'next/app';
 import styles from '../ui/styles/Home.module.css';
 import Link from 'next/link';
+import { SessionProvider } from 'next-auth/react';
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <>
+        <SessionProvider session={pageProps.session}>
             <header>
                 <Link href={'/'}>
                     <a>
@@ -19,7 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 </Link>
             </header>
             <Component {...pageProps} />
-        </>
+        </SessionProvider>
     );
 }
 export default MyApp;

@@ -1,9 +1,11 @@
 import { FormEvent, useRef, useState } from 'react';
 import { ApiService } from '../../data/services/ApiService';
 import styles from '../../ui/styles/pages/posts/publish.module.css';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 export default function PostsPublish() {
-    const [title, setTitle] = useState(''),
+    const { data: session } = useSession(),
+        [title, setTitle] = useState(''),
         [description, setDescription] = useState(''),
         [picture, setPicture] = useState(''),
         blogEditorRef = useRef<HTMLDivElement>(null);
@@ -38,8 +40,17 @@ export default function PostsPublish() {
         }
     }
 
+    if (!session) {
+        return (
+            <div className={styles['login-container']}>
+                <button onClick={() => signIn()}>Login</button>
+            </div>
+        );
+    }
+
     return (
         <>
+            <button onClick={() => signOut()}>Logout</button>
             <h2 className={styles['page-title']}>Novo Post</h2>
             <form onSubmit={sendPost} className={styles['post-form']}>
                 <input
