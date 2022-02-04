@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 import { BlogPost } from '../../../data/@types/BlogPostInterface';
+import { getSession } from 'next-auth/react';
 
 const PostsApis = axios.create({
     baseURL: 'http://localhost:3002/api/posts',
@@ -10,6 +11,11 @@ const PostsApis = axios.create({
 });
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+    const session = await getSession({ req });
+    if (!session && req.method !== 'GET') {
+        res.status(401).send({ error: 'Unauthorized' });
+        return;
+    }
     switch (req.method) {
         case 'GET':
             return handleGet(req, res);
