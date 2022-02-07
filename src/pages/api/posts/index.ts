@@ -4,7 +4,7 @@ import { BlogPost } from '../../../data/@types/BlogPostInterface';
 import { getSession } from 'next-auth/react';
 
 const PostsApis = axios.create({
-    baseURL: 'http://localhost:3002/api/posts',
+    baseURL: `${process.env.NEXT_PUBLIC_DB}/posts`,
     headers: {
         'Content-Type': 'application/json',
     },
